@@ -1,10 +1,4 @@
-const Fellow = require('../model/Fellow');
-
-/* 
-These controllers take incoming requests and utilize the
-methods provided by the Fellow "model" before sending a
-response back to the client (or an error message).
-*/
+const Fellow = require("../models/Fellow");
 
 // Get All (Read)
 const serveFellows = (req, res) => {
@@ -38,14 +32,14 @@ const createFellow = (req, res) => {
 
 // Update
 const updateFellow = (req, res) => {
-  const { fellowName } = req.body;
+  const { updatedFellowName } = req.body;
 
-  if (!fellowName) {
+  if (!updatedFellowName) {
     return res.status(400).send({ message: "Invalid Name" });
   }
 
   const { id } = req.params;
-  const updatedFellow = Fellow.editName(Number(id), fellowName);
+  const updatedFellow = Fellow.editName(Number(id), updatedFellowName);
 
   if (!updatedFellow) {
     return res.status(404).send({

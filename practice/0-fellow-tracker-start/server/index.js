@@ -11,7 +11,14 @@ const {
   serveFellow,
   updateFellow,
   deleteFellow,
-} = require('./controllers/fellowsControllers');
+} = require('./controllers/fellowControllers');
+const {
+  serveStaffs,
+  createStaff,
+  serveStaff,
+  updateStaff,
+  deleteStaff,
+} = require('./controllers/staffControllers');
 
 ////////////////////////
 // Constants
@@ -43,11 +50,21 @@ app.use(express.json());
 // Endpoints
 ////////////////////////
 
+//Fellow Endpoints
+
 app.get('/api/fellows', serveFellows);
 app.post('/api/fellows', createFellow);
 app.get('/api/fellows/:id', serveFellow);
 app.patch('/api/fellows/:id', updateFellow);
 app.delete('/api/fellows/:id', deleteFellow);
+
+//Staff Endpoints
+
+app.get('/api/staff', serveStaffs);
+app.post('/api/staff', createStaff);
+app.get('/api/staff/:id', serveStaff);
+app.patch('/api/staff/:id', updateStaff);
+app.delete('/api/staff/:id', deleteStaff);
 
 const port = 8080;
 app.listen(port, () => console.log(`listening at http://localhost:${port}`));

@@ -1,0 +1,90 @@
+const getId = require('../utils/getId');
+
+const fellows = [
+  { name: 'Carmen', id: getId() },
+  { name: 'Reuben', id: getId() },
+  { name: 'Maya', id: getId() },
+];
+
+const serveFellows = (req, res) => {
+  res.send(fellows);
+}
+
+const createFellow = (req, res) => {
+  // make sure this object matches the options.body on the frontend
+  const { fellowName } = req.body;
+
+  if (!fellowName) {
+    // 400 means "invalid request"
+    return res.status(400).send({ message: "Invalid Name"});
+  }
+
+  const newFellow = {
+    name: fellowName, 
+    id: getId()
+  }
+  fellows.push(newFellow)
+
+  // 201 means "resource created successfully"
+  res.status(201).send(newFellow);
+}
+
+const serveFellow = (req, res) => {
+  // Make sure the property name matches the route parameter below
+  const { id } = req.params;
+
+  // Keep in mind, route parameters are stored as strings.
+  const fellow = fellows.find(fellow => fellow.id === Number(id));
+
+  if (!fellow) {
+    // 404 means "Resource Not Found"
+    return res.status(404).send({ 
+      message: `No fellow with the id ${id}`
+    });
+  }
+
+  res.send(fellow);
+};
+
+const updateFellow = (req, res) => {
+//changed the name just for this because xyz
+  const { updatedFellowName } = req.body;
+
+  if (!updatedFellowName) {
+    return res.status(400).send({ message: "Invalid Name" });
+  }
+
+  const { id } = req.params;
+  const updatedFellow = fellows.find(fellow => fellow.id === Number(id));
+
+  if (!updatedFellow) {
+    return res.status(404).send({ 
+      message: `No fellow with the id ${id}` 
+    });
+  }
+
+  updatedFellow.name = updatedFellowName;
+  res.send(updatedFellow);
+}
+
+const deleteFellow = (req, res) => {
+  const { id } = req.params;
+  const fellowIndex = fellows.findIndex(fellow => fellow.id === Number(id));
+
+  if (fellowIndex === -1) {
+    return res.status(404).send({ 
+      message: `No fellow with the id ${id}` 
+    });
+  }
+
+  fellows.splice(fellowIndex, 1);
+  res.send({ message: `Fellow with the id ${id} deleted` });
+}
+
+module.exports = {
+  serveFellows,
+  createFellow,
+  serveFellow,
+  updateFellow,
+  deleteFellow,
+}
